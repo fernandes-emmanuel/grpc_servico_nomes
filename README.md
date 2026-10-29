@@ -193,16 +193,16 @@ Trechos das saídas obtidas (completas em [`resultados/`](resultados)):
 **Cliente descobrindo os serviços** (`cliente1_demo.txt`):
 ```
 > nomes
-  armazenamento   172.29.0.30:34737
+  armazenamento   172.29.0.30:36645
   calculadora     172.29.0.20:50051
 > soma 2 3
   [lookup] 'calculadora' -> 172.29.0.20:50051
-  = 5   (calculado por maquina-calc1, 8.38 ms)
+  = 5   (calculado por maquina-calc1, 2.95 ms)
 > avaliar "__import__('os')"
   ERRO: ValueError: expressao invalida   (servidor maquina-calc1)
 > put curso SistemasDistribuidos
-  [lookup] 'armazenamento' -> 172.29.0.30:34737
-  ok: PUT 'curso' = 'SistemasDistribuidos' (criada)   (servidor maquina-kv, 5.72 ms)
+  [lookup] 'armazenamento' -> 172.29.0.30:36645
+  ok: PUT 'curso' = 'SistemasDistribuidos' (criada)   (servidor maquina-kv, 2.84 ms)
 ```
 
 **Migração da calculadora com `rebind`** — `maquina-calc2` sobe, o `bind` é recusado e ela faz
@@ -214,11 +214,11 @@ tinha o endereço antigo em cache, detecta a falha, refaz o `lookup` e passa a u
 
 > avaliar 6*7
   [lookup] 'calculadora' -> 172.29.0.20:50051
-  = 42   (calculado por maquina-calc1, 5.85 ms)
+  = 42   (calculado por maquina-calc1, 2.92 ms)
 > avaliar 2**8
   [falha] 'calculadora' em 172.29.0.20:50051 nao respondeu (DEADLINE_EXCEEDED); refazendo lookup
   [lookup] 'calculadora' -> 172.29.0.21:50051
-  = 256   (calculado por maquina-calc2, 7.00 ms)
+  = 256   (calculado por maquina-calc2, 6.29 ms)
 ```
 
 **As quatro operações pela linha de comando** (`naming_client.txt`):

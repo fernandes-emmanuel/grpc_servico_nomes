@@ -1,44 +1,44 @@
 cliente cliente1 - servico de nomes em 172.29.0.10:5678
 > nomes
-  armazenamento   172.29.0.30:34737
+  armazenamento   172.29.0.30:36645
   calculadora     172.29.0.20:50051
 > soma 2 3
   [lookup] 'calculadora' -> 172.29.0.20:50051
-  = 5   (calculado por maquina-calc1, 8.38 ms)
+  = 5   (calculado por maquina-calc1, 2.95 ms)
 > div 10 4
-  = 2.5   (calculado por maquina-calc1, 1.05 ms)
+  = 2.5   (calculado por maquina-calc1, 1.09 ms)
 > pot 2 10
-  = 1024   (calculado por maquina-calc1, 1.00 ms)
+  = 1024   (calculado por maquina-calc1, 1.02 ms)
 > div 1 0
   ERRO: ZeroDivisionError: float division by zero   (servidor maquina-calc1)
 > avaliar (2+3)*7**2
-  = 245   (calculado por maquina-calc1, 0.79 ms)
+  = 245   (calculado por maquina-calc1, 0.87 ms)
 > avaliar "__import__('os')"
   ERRO: ValueError: expressao invalida   (servidor maquina-calc1)
 > put curso SistemasDistribuidos
-  [lookup] 'armazenamento' -> 172.29.0.30:34737
-  ok: PUT 'curso' = 'SistemasDistribuidos' (criada)   (servidor maquina-kv, 5.72 ms)
+  [lookup] 'armazenamento' -> 172.29.0.30:36645
+  ok: PUT 'curso' = 'SistemasDistribuidos' (criada)   (servidor maquina-kv, 2.84 ms)
 > put middleware gRPC
   ok: PUT 'middleware' = 'gRPC' (criada)   (servidor maquina-kv, 1.05 ms)
 > put middleware gRPC+ServicoDeNomes
-  ok: PUT 'middleware' = 'gRPC+ServicoDeNomes' (atualizada)   (servidor maquina-kv, 0.92 ms)
+  ok: PUT 'middleware' = 'gRPC+ServicoDeNomes' (atualizada)   (servidor maquina-kv, 0.91 ms)
 > get middleware
   gRPC+ServicoDeNomes   (servidor maquina-kv, 0.87 ms)
 > get inexistente
-  ERRO: GET 'inexistente': chave inexistente   (servidor maquina-kv, 1.02 ms)
+  ERRO: GET 'inexistente': chave inexistente   (servidor maquina-kv, 0.92 ms)
 > listar
-  2 par(es) em maquina-kv (0.92 ms)
+  2 par(es) em maquina-kv (1.01 ms)
     curso = SistemasDistribuidos
     middleware = gRPC+ServicoDeNomes
 > del curso
-  ok: DELETE 'curso' (era 'SistemasDistribuidos')   (servidor maquina-kv, 1.10 ms)
+  ok: DELETE 'curso' (era 'SistemasDistribuidos')   (servidor maquina-kv, 0.90 ms)
 > listar
-  1 par(es) em maquina-kv (0.89 ms)
+  1 par(es) em maquina-kv (3.84 ms)
     middleware = gRPC+ServicoDeNomes
 > stats
-  calculadora @ maquina-calc1 (172.29.0.20:50051): 7 requisicoes em 3.5s
-    por metodo:  {'Calcular': 4, 'Estatisticas': 1, 'Avaliar': 2}
+  calculadora @ maquina-calc1 (172.29.0.20:50051): 7 requisicoes em 3.4s
+    por metodo:  {'Avaliar': 2, 'Calcular': 4, 'Estatisticas': 1}
     por cliente: {'cliente1': 7}
-  armazenamento @ maquina-kv (172.29.0.30:34737): 9 requisicoes em 3.3s
-    por metodo:  {'Listar': 2, 'Get': 2, 'Put': 3, 'Estatisticas': 1, 'Delete': 1}
+  armazenamento @ maquina-kv (172.29.0.30:36645): 9 requisicoes em 3.2s
+    por metodo:  {'Get': 2, 'Listar': 2, 'Put': 3, 'Delete': 1, 'Estatisticas': 1}
     por cliente: {'cliente1': 9}

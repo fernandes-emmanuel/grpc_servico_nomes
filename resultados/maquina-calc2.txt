@@ -1,6 +1,6 @@
-[01:58:14] servidor 'calculadora' em maquina-calc2, escutando na porta 50051
-[01:58:14] bind   recusado: nome 'calculadora' ja registrado em 172.29.0.20:50051 (use rebind)
-[01:58:14] rebind no servico de nomes 172.29.0.10:5678: 'calculadora' atualizado: 172.29.0.20:50051 -> 172.29.0.21:50051
-[01:58:20] cliente2     '2**8' = 256
-[01:58:24] unbind no servico de nomes: 'calculadora' (172.29.0.21:50051) removido
-[01:58:24] servidor encerrado
+[02:13:29] servidor 'calculadora' em maquina-calc2, escutando na porta 50051
+[02:13:29] bind   recusado: nome 'calculadora' ja registrado em 172.29.0.20:50051 (use rebind)
+[02:13:29] rebind no servico de nomes 172.29.0.10:5678: 'calculadora' atualizado: 172.29.0.20:50051 -> 172.29.0.21:50051
+[02:13:34] cliente2     '2**8' = 256
+[02:13:39] unbind no servico de nomes: 'calculadora' (172.29.0.21:50051) removido
+[02:13:39] servidor encerrado

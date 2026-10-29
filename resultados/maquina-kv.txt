@@ -1,12 +1,12 @@
-[01:58:07] servidor 'armazenamento' em maquina-kv, escutando na porta 34737
-[01:58:07] bind   no servico de nomes 172.29.0.10:5678: 'armazenamento' -> 172.29.0.30:34737
-[01:58:10] cliente1     ok   PUT 'curso' = 'SistemasDistribuidos' (criada)
-[01:58:10] cliente1     ok   PUT 'middleware' = 'gRPC' (criada)
-[01:58:10] cliente1     ok   PUT 'middleware' = 'gRPC+ServicoDeNomes' (atualizada)
-[01:58:10] cliente1     ok   GET 'middleware' -> 'gRPC+ServicoDeNomes'
-[01:58:10] cliente1     ERRO GET 'inexistente': chave inexistente
-[01:58:10] cliente1     ok   LISTAR 2 par(es)
-[01:58:10] cliente1     ok   DELETE 'curso' (era 'SistemasDistribuidos')
-[01:58:10] cliente1     ok   LISTAR 1 par(es)
-[01:58:24] unbind no servico de nomes: 'armazenamento' (172.29.0.30:34737) removido
-[01:58:24] servidor encerrado
+[02:13:22] servidor 'armazenamento' em maquina-kv, escutando na porta 36645
+[02:13:22] bind   no servico de nomes 172.29.0.10:5678: 'armazenamento' -> 172.29.0.30:36645
+[02:13:25] cliente1     ok   PUT 'curso' = 'SistemasDistribuidos' (criada)
+[02:13:25] cliente1     ok   PUT 'middleware' = 'gRPC' (criada)
+[02:13:25] cliente1     ok   PUT 'middleware' = 'gRPC+ServicoDeNomes' (atualizada)
+[02:13:25] cliente1     ok   GET 'middleware' -> 'gRPC+ServicoDeNomes'
+[02:13:25] cliente1     ERRO GET 'inexistente': chave inexistente
+[02:13:25] cliente1     ok   LISTAR 2 par(es)
+[02:13:25] cliente1     ok   DELETE 'curso' (era 'SistemasDistribuidos')
+[02:13:25] cliente1     ok   LISTAR 1 par(es)
+[02:13:39] unbind no servico de nomes: 'armazenamento' (172.29.0.30:36645) removido
+[02:13:39] servidor encerrado

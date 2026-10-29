@@ -1,6 +1,6 @@
 $ naming_client.py list
-armazenamento   172.29.0.30:34737  atualizado 01:58:07
-calculadora     172.29.0.21:50051  atualizado 01:58:14
+armazenamento   172.29.0.30:36645  atualizado 02:13:22
+calculadora     172.29.0.21:50051  atualizado 02:13:29
 $ naming_client.py lookup calculadora
 172.29.0.21:50051
 $ naming_client.py bind calculadora 1.2.3.4:9999
