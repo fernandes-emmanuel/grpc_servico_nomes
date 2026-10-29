@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package naming;
+
+service NamingService {
+	rpc Bind (BindRequest) returns (Status) {}
+	rpc Lookup (NameRequest) returns (LookupReply) {}
+	rpc Unbind (NameRequest) returns (Status) {}
+	rpc Rebind (BindRequest) returns (Status) {}
+	rpc List (Empty) returns (ListReply) {}
+}
+
+message Address {
+	string host = 1;
+	int32 port = 2;
+}
+
+message BindRequest {
+	string name = 1;
+	Address address = 2;
+}
+
+message NameRequest {
+	string name = 1;
+}
+
+message Status {
+	bool ok = 1;
+	string message = 2;
+}
+
+message LookupReply {
+	bool found = 1;
+	Address address = 2;
+	string message = 3;
+}
+
+message Empty {}
+
+message Entry {
+	string name = 1;
+	Address address = 2;
+	double registered_at = 3;
+	double updated_at = 4;
+}
+
+message ListReply {
+	repeated Entry entries = 1;
+}

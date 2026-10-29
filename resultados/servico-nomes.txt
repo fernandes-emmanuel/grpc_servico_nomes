@@ -1,0 +1,27 @@
+[01:58:07] servico de nomes em servico-nomes (172.29.0.10) porta 5678
+[01:58:07] BIND    de ipv4:172.29.0.20:39722   ok   'calculadora' -> 172.29.0.20:50051
+[01:58:07] BIND    de ipv4:172.29.0.30:43374   ok   'armazenamento' -> 172.29.0.30:34737
+[01:58:10] LIST    de ipv4:172.29.0.40:48242   2 registro(s)
+[01:58:10] LOOKUP  de ipv4:172.29.0.40:48242   'calculadora' -> 172.29.0.20:50051
+[01:58:10] LOOKUP  de ipv4:172.29.0.40:48242   'armazenamento' -> 172.29.0.30:34737
+[01:58:11] LOOKUP  de ipv4:172.29.0.41:44326   'calculadora' -> 172.29.0.20:50051
+[01:58:14] BIND    de ipv4:172.29.0.21:58098   ERRO nome 'calculadora' ja registrado em 172.29.0.20:50051 (use rebind)
+[01:58:14] REBIND  de ipv4:172.29.0.21:58098   ok   'calculadora' atualizado: 172.29.0.20:50051 -> 172.29.0.21:50051
+[01:58:20] LOOKUP  de ipv4:172.29.0.41:44326   'calculadora' -> 172.29.0.21:50051
+[01:58:20] LOOKUP  de ipv4:172.29.0.41:44326   'armazenamento' -> 172.29.0.30:34737
+[01:58:20] LIST    de ipv4:172.29.0.40:60126   2 registro(s)
+[01:58:21] LOOKUP  de ipv4:172.29.0.40:60132   'calculadora' -> 172.29.0.21:50051
+[01:58:21] BIND    de ipv4:172.29.0.40:40996   ERRO nome 'calculadora' ja registrado em 172.29.0.21:50051 (use rebind)
+[01:58:22] BIND    de ipv4:172.29.0.40:41010   ok   'teste' -> 172.29.0.99:7000
+[01:58:22] REBIND  de ipv4:172.29.0.40:41026   ok   'teste' atualizado: 172.29.0.99:7000 -> 172.29.0.98:7001
+[01:58:23] LOOKUP  de ipv4:172.29.0.40:41032   'teste' -> 172.29.0.98:7001
+[01:58:23] UNBIND  de ipv4:172.29.0.40:41036   ok   'teste' (172.29.0.98:7001) removido
+[01:58:24] UNBIND  de ipv4:172.29.0.40:41038   ERRO nome 'teste' nao registrado
+[01:58:24] LOOKUP  de ipv4:172.29.0.40:41052   'teste' -> nao encontrado
+[01:58:24] LOOKUP  de ipv4:172.29.0.30:43374   'armazenamento' -> 172.29.0.30:34737
+[01:58:24] LOOKUP  de ipv4:172.29.0.21:58098   'calculadora' -> 172.29.0.21:50051
+[01:58:24] UNBIND  de ipv4:172.29.0.21:58098   ok   'calculadora' (172.29.0.21:50051) removido
+[01:58:24] UNBIND  de ipv4:172.29.0.30:43374   ok   'armazenamento' (172.29.0.30:34737) removido
+[01:58:25] LIST    de ipv4:172.29.0.40:41054   0 registro(s)
+[01:58:25] LOOKUP  de ipv4:172.29.0.40:41068   'calculadora' -> nao encontrado
+[01:58:26] servico de nomes encerrado

@@ -1,0 +1,103 @@
+[01:58:26] servico de nomes em vm (192.0.2.2) porta 5678
+[01:58:27] servidor 'armazenamento' em vm, escutando na porta 40361
+[01:58:27] servidor 'calculadora' em vm, escutando na porta 50051
+[01:58:27] BIND    de ipv4:127.0.0.1:44250     ok   'armazenamento' -> localhost:40361
+[01:58:27] bind   no servico de nomes localhost:5678: 'armazenamento' -> localhost:40361[01:58:27] BIND    de ipv4:127.0.0.1:44256     ok   'calculadora' -> localhost:50051
+
+[01:58:27] bind   no servico de nomes localhost:5678: 'calculadora' -> localhost:50051
+
+### cliente (demo)
+cliente vm - servico de nomes em localhost:5678
+> nomes
+[01:58:28] LIST    de ipv4:127.0.0.1:44258     2 registro(s)
+  armazenamento   localhost:40361
+  calculadora     localhost:50051
+> soma 2 3
+[01:58:28] LOOKUP  de ipv4:127.0.0.1:44258     'calculadora' -> localhost:50051
+  [lookup] 'calculadora' -> localhost:50051
+[01:58:28] vm           SOMA 2 3 = 5
+  = 5   (calculado por vm, 4.35 ms)
+> div 10 4
+[01:58:28] vm           DIV 10 4 = 2.5
+  = 2.5   (calculado por vm, 0.75 ms)
+> pot 2 10
+[01:58:28] vm           POT 2 10 = 1024
+  = 1024   (calculado por vm, 0.60 ms)
+> div 1 0
+[01:58:28] vm           DIV 1 0 -> ERRO ZeroDivisionError: float division by zero
+  ERRO: ZeroDivisionError: float division by zero   (servidor vm)
+> avaliar (2+3)*7**2
+[01:58:28] vm           '(2+3)*7**2' = 245
+  = 245   (calculado por vm, 0.82 ms)
+> avaliar "__import__('os')"
+[01:58:28] vm           "__import__('os')" -> ERRO ValueError: expressao invalida
+  ERRO: ValueError: expressao invalida   (servidor vm)
+> put curso SistemasDistribuidos
+[01:58:28] LOOKUP  de ipv4:127.0.0.1:44258     'armazenamento' -> localhost:40361
+  [lookup] 'armazenamento' -> localhost:40361
+[01:58:28] vm           ok   PUT 'curso' = 'SistemasDistribuidos' (criada)
+  ok: PUT 'curso' = 'SistemasDistribuidos' (criada)   (servidor vm, 3.01 ms)
+> put middleware gRPC
+[01:58:28] vm           ok   PUT 'middleware' = 'gRPC' (criada)
+  ok: PUT 'middleware' = 'gRPC' (criada)   (servidor vm, 0.76 ms)
+> put middleware gRPC+ServicoDeNomes
+[01:58:28] vm           ok   PUT 'middleware' = 'gRPC+ServicoDeNomes' (atualizada)
+  ok: PUT 'middleware' = 'gRPC+ServicoDeNomes' (atualizada)   (servidor vm, 0.60 ms)
+> get middleware
+[01:58:28] vm           ok   GET 'middleware' -> 'gRPC+ServicoDeNomes'
+  gRPC+ServicoDeNomes   (servidor vm, 0.60 ms)
+> get inexistente
+[01:58:28] vm           ERRO GET 'inexistente': chave inexistente
+  ERRO: GET 'inexistente': chave inexistente   (servidor vm, 0.49 ms)
+> listar
+[01:58:28] vm           ok   LISTAR 2 par(es)
+  2 par(es) em vm (0.51 ms)
+    curso = SistemasDistribuidos
+    middleware = gRPC+ServicoDeNomes
+> del curso
+[01:58:28] vm           ok   DELETE 'curso' (era 'SistemasDistribuidos')
+  ok: DELETE 'curso' (era 'SistemasDistribuidos')   (servidor vm, 0.54 ms)
+> listar
+[01:58:28] vm           ok   LISTAR 1 par(es)
+  1 par(es) em vm (0.46 ms)
+    middleware = gRPC+ServicoDeNomes
+> stats
+  calculadora @ vm (localhost:50051): 7 requisicoes em 1.5s
+    por metodo:  {'Estatisticas': 1, 'Avaliar': 2, 'Calcular': 4}
+    por cliente: {'vm': 7}
+  armazenamento @ vm (localhost:40361): 9 requisicoes em 1.5s
+    por metodo:  {'Delete': 1, 'Get': 2, 'Estatisticas': 1, 'Listar': 2, 'Put': 3}
+    por cliente: {'vm': 9}
+
+### calculadora muda de endereco: nova instancia faz rebind, a antiga 'cai' sem unbind
+[01:58:29] servidor 'calculadora' em vm, escutando na porta 50061
+[01:58:29] BIND    de ipv4:127.0.0.1:44270     ERRO nome 'calculadora' ja registrado em localhost:50051 (use rebind)
+[01:58:29] bind   recusado: nome 'calculadora' ja registrado em localhost:50051 (use rebind)
+[01:58:29] REBIND  de ipv4:127.0.0.1:44270     ok   'calculadora' atualizado: localhost:50051 -> localhost:50061
+[01:58:29] rebind no servico de nomes localhost:5678: 'calculadora' atualizado: localhost:50051 -> localhost:50061
+cliente vm - servico de nomes em localhost:5678
+[01:58:30] LOOKUP  de ipv4:127.0.0.1:44272     'calculadora' -> localhost:50061
+  [lookup] 'calculadora' -> localhost:50061
+[01:58:30] vm           '1+1' = 2
+  = 2   (calculado por vm, 3.86 ms)
+teste_local.sh: line 22:  5244 Killed                  $PY calc_server.py --advertise localhost
+
+### unbind manual e lookup de nome removido
+[01:58:30] UNBIND  de ipv4:127.0.0.1:44280     ok   'armazenamento' (localhost:40361) removido
+ok: 'armazenamento' (localhost:40361) removido
+cliente vm - servico de nomes em localhost:5678
+[01:58:30] LOOKUP  de ipv4:127.0.0.1:44290     'armazenamento' -> nao encontrado
+  ERRO no lookup: nome 'armazenamento' nao registrado
+
+### encerramento: os servidores fazem unbind
+[01:58:30] LOOKUP  de ipv4:127.0.0.1:44270     'calculadora' -> localhost:50061
+[01:58:30] LOOKUP  de ipv4:127.0.0.1:44250     'armazenamento' -> nao encontrado
+[01:58:30] unbind nao realizado: nome 'armazenamento' nao registrado
+[01:58:30] UNBIND  de ipv4:127.0.0.1:44270     ok   'calculadora' (localhost:50061) removido
+[01:58:30] unbind no servico de nomes: 'calculadora' (localhost:50061) removido
+[01:58:30] servidor encerrado
+[01:58:30] servidor encerrado
+[01:58:30] LIST    de ipv4:127.0.0.1:44304     0 registro(s)
+[01:58:30] servico de nomes encerrado
+
+ok

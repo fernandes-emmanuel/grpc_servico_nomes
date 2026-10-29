@@ -1,0 +1,94 @@
+### subindo servico de nomes e os dois servicos em maquinas diferentes
+
+### cliente1 (172.29.0.40): demonstracao
+cliente cliente1 - servico de nomes em 172.29.0.10:5678
+> nomes
+  armazenamento   172.29.0.30:34737
+  calculadora     172.29.0.20:50051
+> soma 2 3
+  [lookup] 'calculadora' -> 172.29.0.20:50051
+  = 5   (calculado por maquina-calc1, 8.38 ms)
+> div 10 4
+  = 2.5   (calculado por maquina-calc1, 1.05 ms)
+> pot 2 10
+  = 1024   (calculado por maquina-calc1, 1.00 ms)
+> div 1 0
+  ERRO: ZeroDivisionError: float division by zero   (servidor maquina-calc1)
+> avaliar (2+3)*7**2
+  = 245   (calculado por maquina-calc1, 0.79 ms)
+> avaliar "__import__('os')"
+  ERRO: ValueError: expressao invalida   (servidor maquina-calc1)
+> put curso SistemasDistribuidos
+  [lookup] 'armazenamento' -> 172.29.0.30:34737
+  ok: PUT 'curso' = 'SistemasDistribuidos' (criada)   (servidor maquina-kv, 5.72 ms)
+> put middleware gRPC
+  ok: PUT 'middleware' = 'gRPC' (criada)   (servidor maquina-kv, 1.05 ms)
+> put middleware gRPC+ServicoDeNomes
+  ok: PUT 'middleware' = 'gRPC+ServicoDeNomes' (atualizada)   (servidor maquina-kv, 0.92 ms)
+> get middleware
+  gRPC+ServicoDeNomes   (servidor maquina-kv, 0.87 ms)
+> get inexistente
+  ERRO: GET 'inexistente': chave inexistente   (servidor maquina-kv, 1.02 ms)
+> listar
+  2 par(es) em maquina-kv (0.92 ms)
+    curso = SistemasDistribuidos
+    middleware = gRPC+ServicoDeNomes
+> del curso
+  ok: DELETE 'curso' (era 'SistemasDistribuidos')   (servidor maquina-kv, 1.10 ms)
+> listar
+  1 par(es) em maquina-kv (0.89 ms)
+    middleware = gRPC+ServicoDeNomes
+> stats
+  calculadora @ maquina-calc1 (172.29.0.20:50051): 7 requisicoes em 3.5s
+    por metodo:  {'Calcular': 4, 'Estatisticas': 1, 'Avaliar': 2}
+    por cliente: {'cliente1': 7}
+  armazenamento @ maquina-kv (172.29.0.30:34737): 9 requisicoes em 3.3s
+    por metodo:  {'Listar': 2, 'Get': 2, 'Put': 3, 'Estatisticas': 1, 'Delete': 1}
+    por cliente: {'cliente1': 9}
+
+### cliente2 (172.29.0.41) com endereco em cache; a calculadora migra para maquina-calc2
+cliente cliente2 - servico de nomes em 172.29.0.10:5678
+> avaliar 6*7
+  [lookup] 'calculadora' -> 172.29.0.20:50051
+  = 42   (calculado por maquina-calc1, 5.85 ms)
+> avaliar 2**8
+  [falha] 'calculadora' em 172.29.0.20:50051 nao respondeu (DEADLINE_EXCEEDED); refazendo lookup
+  [lookup] 'calculadora' -> 172.29.0.21:50051
+  = 256   (calculado por maquina-calc2, 7.00 ms)
+> stats
+  calculadora @ maquina-calc2 (172.29.0.21:50051): 2 requisicoes em 5.7s
+    por metodo:  {'Estatisticas': 1, 'Avaliar': 1}
+    por cliente: {'cliente2': 2}
+  [lookup] 'armazenamento' -> 172.29.0.30:34737
+  armazenamento @ maquina-kv (172.29.0.30:34737): 10 requisicoes em 12.5s
+    por metodo:  {'Listar': 2, 'Delete': 1, 'Estatisticas': 2, 'Put': 3, 'Get': 2}
+    por cliente: {'cliente2': 1, 'cliente1': 9}
+
+### ferramenta de linha de comando do servico de nomes (de cliente1)
+$ naming_client.py list
+armazenamento   172.29.0.30:34737  atualizado 01:58:07
+calculadora     172.29.0.21:50051  atualizado 01:58:14
+$ naming_client.py lookup calculadora
+172.29.0.21:50051
+$ naming_client.py bind calculadora 1.2.3.4:9999
+ERRO: nome 'calculadora' ja registrado em 172.29.0.21:50051 (use rebind)
+$ naming_client.py bind teste 172.29.0.99:7000
+ok: 'teste' -> 172.29.0.99:7000
+$ naming_client.py rebind teste 172.29.0.98:7001
+ok: 'teste' atualizado: 172.29.0.99:7000 -> 172.29.0.98:7001
+$ naming_client.py lookup teste
+172.29.0.98:7001
+$ naming_client.py unbind teste
+ok: 'teste' (172.29.0.98:7001) removido
+$ naming_client.py unbind teste
+ERRO: nome 'teste' nao registrado
+$ naming_client.py lookup teste
+ERRO: nome 'teste' nao registrado
+
+### encerrando os servidores (SIGTERM -> unbind)
+cliente cliente1 - servico de nomes em 172.29.0.10:5678
+  (nenhum registro)
+cliente cliente1 - servico de nomes em 172.29.0.10:5678
+  ERRO no lookup: nome 'calculadora' nao registrado
+
+logs em resultados/

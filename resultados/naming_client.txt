@@ -1,0 +1,19 @@
+$ naming_client.py list
+armazenamento   172.29.0.30:34737  atualizado 01:58:07
+calculadora     172.29.0.21:50051  atualizado 01:58:14
+$ naming_client.py lookup calculadora
+172.29.0.21:50051
+$ naming_client.py bind calculadora 1.2.3.4:9999
+ERRO: nome 'calculadora' ja registrado em 172.29.0.21:50051 (use rebind)
+$ naming_client.py bind teste 172.29.0.99:7000
+ok: 'teste' -> 172.29.0.99:7000
+$ naming_client.py rebind teste 172.29.0.98:7001
+ok: 'teste' atualizado: 172.29.0.99:7000 -> 172.29.0.98:7001
+$ naming_client.py lookup teste
+172.29.0.98:7001
+$ naming_client.py unbind teste
+ok: 'teste' (172.29.0.98:7001) removido
+$ naming_client.py unbind teste
+ERRO: nome 'teste' nao registrado
+$ naming_client.py lookup teste
+ERRO: nome 'teste' nao registrado

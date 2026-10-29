@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package servicos;
+
+service Calculadora {
+	rpc Calcular (Operacao) returns (Resultado) {}
+	rpc Avaliar (Expressao) returns (Resultado) {}
+	rpc Estatisticas (Vazio) returns (Stats) {}
+}
+
+service Armazenamento {
+	rpc Put (Par) returns (Resposta) {}
+	rpc Get (Chave) returns (Resposta) {}
+	rpc Delete (Chave) returns (Resposta) {}
+	rpc Listar (Vazio) returns (ListaPares) {}
+	rpc Estatisticas (Vazio) returns (Stats) {}
+}
+
+message Vazio {}
+
+message Operacao {
+	string op = 1;
+	double a = 2;
+	double b = 3;
+}
+
+message Expressao {
+	string texto = 1;
+}
+
+message Resultado {
+	bool ok = 1;
+	double valor = 2;
+	string erro = 3;
+	string servidor = 4;
+}
+
+message Par {
+	string chave = 1;
+	string valor = 2;
+}
+
+message Chave {
+	string chave = 1;
+}
+
+message Resposta {
+	bool ok = 1;
+	string valor = 2;
+	string mensagem = 3;
+	string servidor = 4;
+}
+
+message ListaPares {
+	repeated Par pares = 1;
+	string servidor = 2;
+}
+
+message Stats {
+	string servidor = 1;
+	string endereco = 2;
+	double uptime = 3;
+	int64 requisicoes = 4;
+	map<string, int64> por_metodo = 5;
+	map<string, int64> por_cliente = 6;
+}

@@ -1,0 +1,16 @@
+cliente cliente2 - servico de nomes em 172.29.0.10:5678
+> avaliar 6*7
+  [lookup] 'calculadora' -> 172.29.0.20:50051
+  = 42   (calculado por maquina-calc1, 5.85 ms)
+> avaliar 2**8
+  [falha] 'calculadora' em 172.29.0.20:50051 nao respondeu (DEADLINE_EXCEEDED); refazendo lookup
+  [lookup] 'calculadora' -> 172.29.0.21:50051
+  = 256   (calculado por maquina-calc2, 7.00 ms)
+> stats
+  calculadora @ maquina-calc2 (172.29.0.21:50051): 2 requisicoes em 5.7s
+    por metodo:  {'Estatisticas': 1, 'Avaliar': 1}
+    por cliente: {'cliente2': 2}
+  [lookup] 'armazenamento' -> 172.29.0.30:34737
+  armazenamento @ maquina-kv (172.29.0.30:34737): 10 requisicoes em 12.5s
+    por metodo:  {'Listar': 2, 'Delete': 1, 'Estatisticas': 2, 'Put': 3, 'Get': 2}
+    por cliente: {'cliente2': 1, 'cliente1': 9}

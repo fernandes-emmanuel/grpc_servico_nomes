@@ -1,0 +1,9 @@
+[01:58:07] servidor 'calculadora' em maquina-calc1, escutando na porta 50051
+[01:58:07] bind   no servico de nomes 172.29.0.10:5678: 'calculadora' -> 172.29.0.20:50051
+[01:58:10] cliente1     SOMA 2 3 = 5
+[01:58:10] cliente1     DIV 10 4 = 2.5
+[01:58:10] cliente1     POT 2 10 = 1024
+[01:58:10] cliente1     DIV 1 0 -> ERRO ZeroDivisionError: float division by zero
+[01:58:10] cliente1     '(2+3)*7**2' = 245
+[01:58:10] cliente1     "__import__('os')" -> ERRO ValueError: expressao invalida
+[01:58:11] cliente2     '6*7' = 42
